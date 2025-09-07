@@ -162,7 +162,7 @@ def main():
                     filtered_files = filter_directory(resolution_path)
 
                     pack_name = (
-                        f"{addon_directory}-{resolution_directory}-{version_input}.zip"
+                        f"{addon_directory}_{resolution_directory}_{version_input}.zip"
                     )
 
                     with ZipFile(
