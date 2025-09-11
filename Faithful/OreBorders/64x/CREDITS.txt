@@ -6,3 +6,6 @@ Aerod
 
 Hedreon
     64x port.
+
+Scutoel
+    Textured border idea.
