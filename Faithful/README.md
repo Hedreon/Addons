@@ -6,4 +6,4 @@ To learn more about one of my Faithful add-ons, navigate to the add-on folder of
 
 ## `Packer.py` requirements
 
-- Latest stable version of Python. (https://www.python.org/downloads/latest/#site-map)
+- Latest stable version of Python. (https://www.python.org/downloads/latest)
