@@ -20,7 +20,7 @@ def handle_function(function):
 
 def custom_input(input_type=None):
     """
-    This function returns an input function with an optional `input_type` parameter.
+    This function returns an input with an optional `input_type` parameter.
 
     `input_type`: What characters are available to input. The following options are available:
     - `"custom"`
@@ -156,16 +156,15 @@ def main():
                 if len(resolution_directories) == 1:
                     print(f"└─┬ {resolution_message}")
                     print(f"  └── {files_message}\n")
+                elif index == 0:
+                    print(f"└─┬ {resolution_message}")
+                    print(f"  ├── {files_message}")
+                elif index >= 1 and index < (len(resolution_directories) - 1):
+                    print(f"  ├ {resolution_message}")
+                    print(f"  ├── {files_message}")
                 else:
-                    if index == 0:
-                        print(f"└─┬ {resolution_message}")
-                        print(f"  ├── {files_message}")
-                    elif index >= 1 and index < (len(resolution_directories) - 1):
-                        print(f"  ├ {resolution_message}")
-                        print(f"  ├── {files_message}")
-                    else:
-                        print(f"  ├ {resolution_message}")
-                        print(f"  └── {files_message}\n")
+                    print(f"  ├ {resolution_message}")
+                    print(f"  └── {files_message}\n")
         valid_version, version_input = ask(
             "Enter the Minecraft version to package", True, "custom"
         )
