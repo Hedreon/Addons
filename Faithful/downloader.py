@@ -44,6 +44,7 @@ BLOCKS = {
                 "raw_iron_block",
                 "lapis_block",
                 "redstone_block",
+                "quartz_block_side",
             ],
         }
     },

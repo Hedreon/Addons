@@ -2,10 +2,13 @@ Vanilla Tweaks Team
     Original Ore Borders resource pack.
 
 Aerod
-    Ore Borders add-on.
+    Original Ore Borders add-on.
 
 Hedreon
     64x port.
+
+AyaanThe0ne
+    Bedrock Edition port.
 
 Scutoel
     Textured border idea.
