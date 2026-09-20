@@ -10,29 +10,42 @@ from urllib.request import Request, urlopen
 
 BLOCKS = {
     "ORE_BORDERS": {
-        "64X": [
-            "ancient_debris_side",
-            "ancient_debris_top",
-            "coal_ore",
-            "copper_ore",
-            "deepslate_coal_ore",
-            "deepslate_copper_ore",
-            "deepslate_diamond_ore",
-            "deepslate_emerald_ore",
-            "deepslate_gold_ore",
-            "deepslate_iron_ore",
-            "deepslate_lapis_ore",
-            "deepslate_redstone_ore",
-            "diamond_ore",
-            "emerald_ore",
-            "gilded_blackstone",
-            "gold_ore",
-            "iron_ore",
-            "lapis_ore",
-            "nether_gold_ore",
-            "nether_quartz_ore",
-            "redstone_ore",
-        ]
+        "64X": {
+            "ORES": [
+                "ancient_debris_side",
+                "ancient_debris_top",
+                "coal_ore",
+                "copper_ore",
+                "deepslate_coal_ore",
+                "deepslate_copper_ore",
+                "deepslate_diamond_ore",
+                "deepslate_emerald_ore",
+                "deepslate_gold_ore",
+                "deepslate_iron_ore",
+                "deepslate_lapis_ore",
+                "deepslate_redstone_ore",
+                "diamond_ore",
+                "emerald_ore",
+                "gilded_blackstone",
+                "gold_ore",
+                "iron_ore",
+                "lapis_ore",
+                "nether_gold_ore",
+                "nether_quartz_ore",
+                "redstone_ore",
+            ],
+            "BORDERS": [
+                "lava_still",
+                "coal_block",
+                "raw_copper_block",
+                "diamond_block",
+                "emerald_block",
+                "raw_gold_block",
+                "raw_iron_block",
+                "lapis_block",
+                "redstone_block",
+            ],
+        }
     },
     "STATIC_LANTERNS": {"32X": ["sea_lantern"], "64X": ["sea_lantern"]},
 }
@@ -124,15 +137,36 @@ def get_texture_ids(textures_url, textures_list):
     return results
 
 
-def download_textures(textures_url, textures_list, resource_pack, output_path):
+def download_textures(
+    textures_url,
+    textures_list,
+    resource_pack,
+    addon_name,
+    output_path,
+    category_name=None,
+):
     pack_directory = output_path / resource_pack
     pack_directory.mkdir(exist_ok=True)
+
+    addon_directory = pack_directory / addon_name
+    addon_directory.mkdir(exist_ok=True)
+
+    category_directory = None
+
+    if category_name != None:
+        category_directory = addon_directory / category_name
+        category_directory.mkdir(exist_ok=True)
 
     for texture in textures_list:
         texture_name = texture["name"]
         texture_id = texture["id"]
 
-        download_path = pack_directory / f"{texture_name}.png"
+        download_path = None
+
+        if category_name != None:
+            download_path = category_directory / f"{texture_name}.png"
+        else:
+            download_path = addon_directory / f"{texture_name}.png"
 
         download_url = f"{textures_url}/{texture_id}/url/{resource_pack}/java-latest"
 
@@ -163,11 +197,17 @@ def main():
     for addon_name, addon_content in BLOCKS.items():
         print(f"├ Add-on: {format_pascal(addon_name)}")
 
-        for index, (resolution, block_list) in enumerate(addon_content.items()):
+        for index, (resolution, block_data) in enumerate(addon_content.items()):
+            collected_files = []
+
+            if isinstance(block_data, list):
+                collected_files = [f"{block}.png" for block in block_data]
+            else:
+                for _, block_list in block_data.items():
+                    collected_files.extend([f"{block}.png" for block in block_list])
+
             resolution_message = f"Resolution: {resolution.lower()}"
-            files_message = (
-                f"Files to download: {[f"{block}.png" for block in block_list]}"
-            )
+            files_message = f"Files to download: {collected_files}"
 
             if len(addon_content) == 1:
                 print(f"└─┬ {resolution_message}")
@@ -192,13 +232,31 @@ def main():
         print("\nDownloading files...\n")
 
         for addon_name, addon_content in BLOCKS.items():
-            for resolution, block_list in addon_content.items():
-                texture_ids = get_texture_ids(textures_url, block_list)
+            for resolution, block_data in addon_content.items():
                 resource_pack = f"faithful_{resolution.lower()}"
 
-                download_textures(
-                    textures_url, texture_ids, resource_pack, downloaded_directory
-                )
+                if isinstance(block_data, list):
+                    texture_ids = get_texture_ids(textures_url, block_data)
+
+                    download_textures(
+                        textures_url,
+                        texture_ids,
+                        resource_pack,
+                        addon_name.lower(),
+                        downloaded_directory,
+                    )
+                else:
+                    for category_name, block_list in block_data.items():
+                        texture_ids = get_texture_ids(textures_url, block_list)
+
+                        download_textures(
+                            textures_url,
+                            texture_ids,
+                            resource_pack,
+                            addon_name.lower(),
+                            downloaded_directory,
+                            category_name.lower(),
+                        )
     input("\nPress any key to exit...")
 
 
