@@ -1,6 +1,7 @@
 {
     "pack": {
-        "min_format": 88,
+        "min_format": 97.1,
+        "max_format": 107.1,
         "description": "Ore Borders for Faithful 64x"
     }
 }
