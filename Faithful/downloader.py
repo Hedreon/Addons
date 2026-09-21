@@ -48,7 +48,7 @@ BLOCKS = {
             ],
         }
     },
-    "STATIC_LANTERNS": {"32X": ["sea_lantern"], "64X": ["sea_lantern"]},
+    "STATIC_SEA_LANTERNS": {"32X": ["sea_lantern"], "64X": ["sea_lantern"]},
 }
 
 # Functions #
