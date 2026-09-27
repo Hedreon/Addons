@@ -114,12 +114,12 @@ def format_pascal(format_value):
     return "".join(word.capitalize() for word in format_value.split("_"))
 
 
-def get_texture_ids(textures_url, textures_list):
+def get_texture_ids(api_url, textures_list):
     results = []
     found_ids = set()
 
     for texture in textures_list:
-        metadata_url = f"{textures_url}/{texture}"
+        metadata_url = f"{api_url}/{texture}"
 
         metadata_request = Request(
             metadata_url,
@@ -139,7 +139,7 @@ def get_texture_ids(textures_url, textures_list):
 
 
 def download_textures(
-    textures_url,
+    api_url,
     textures_list,
     resource_pack,
     addon_name,
@@ -169,7 +169,7 @@ def download_textures(
         else:
             download_path = addon_directory / f"{texture_name}.png"
 
-        download_url = f"{textures_url}/{texture_id}/url/{resource_pack}/java-latest"
+        download_url = f"{api_url}/{texture_id}/url/{resource_pack}/java-latest"
 
         download_request = Request(
             download_url, headers={"Accept": "image/png", "User-Agent": "Mozilla/5.0"}
@@ -187,13 +187,13 @@ def download_textures(
 
 
 def main():
-    textures_url = "https://api.faithfulpack.net/v2/textures"
+    api_url = "https://api.faithfulpack.net/v2/textures"
 
     current_directory = Path(__file__).parent
     parent_directory = current_directory.parent
 
     print(f"The following will be downloaded from")
-    print(f"'{clean_url(textures_url)}' once confirmed:\n")
+    print(f"'{clean_url(api_url)}' once confirmed:\n")
 
     for addon_name, addon_content in BLOCKS.items():
         print(f"├ Add-on: {format_pascal(addon_name)}")
@@ -237,10 +237,10 @@ def main():
                 resource_pack = f"faithful_{resolution.lower()}"
 
                 if isinstance(block_data, list):
-                    texture_ids = get_texture_ids(textures_url, block_data)
+                    texture_ids = get_texture_ids(api_url, block_data)
 
                     download_textures(
-                        textures_url,
+                        api_url,
                         texture_ids,
                         resource_pack,
                         addon_name.lower(),
@@ -248,10 +248,10 @@ def main():
                     )
                 else:
                     for category_name, block_list in block_data.items():
-                        texture_ids = get_texture_ids(textures_url, block_list)
+                        texture_ids = get_texture_ids(api_url, block_list)
 
                         download_textures(
-                            textures_url,
+                            api_url,
                             texture_ids,
                             resource_pack,
                             addon_name.lower(),
