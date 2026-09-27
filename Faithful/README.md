@@ -6,4 +6,4 @@ To learn more about one of my Faithful add-ons, navigate to the add-on folder of
 
 ## Script requirements
 
-- Latest stable version of Python. (https://www.python.org/downloads/latest)
+- Latest stable version of Python (https://www.python.org/downloads/latest).
